@@ -116,11 +116,6 @@ const CreateAgentPage = () => {
             timestamp: new Date().toISOString(),
           },
         ],
-        metrics: {
-          executionTime: 245,
-          memoryUsage: 128,
-          successRate: 93,
-        },
       });
     }, 2000);
   };
