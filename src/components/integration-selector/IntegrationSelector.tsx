@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, Check } from "lucide-react";
+import { AlertCircle, Check, ChevronRight } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { motion } from "framer-motion";
 
 interface IntegrationOption {
   id: string;
@@ -196,12 +197,32 @@ const IntegrationSelector: React.FC<IntegrationSelectorProps> = ({
   );
 
   return (
-    <Card className="w-full bg-background">
+    <Card className="w-full bg-background border shadow-sm">
       <CardContent className="pt-6">
-        <h3 className="text-lg font-semibold mb-4">Connect Integrations</h3>
+        <h3 className="text-lg font-semibold mb-6 flex items-center gap-2 text-primary">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="lucide lucide-plug-2"
+          >
+            <path d="M9 2v6" />
+            <path d="M15 2v6" />
+            <path d="M12 17v5" />
+            <path d="M5 8h14" />
+            <path d="M6 11V8h12v3a6 6 0 1 1-12 0v0Z" />
+          </svg>
+          Connect Integrations
+        </h3>
 
         {error && (
-          <Alert variant="destructive" className="mb-4">
+          <Alert variant="destructive" className="mb-6">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
@@ -213,9 +234,13 @@ const IntegrationSelector: React.FC<IntegrationSelectorProps> = ({
           onValueChange={setActiveCategory}
           className="mb-6"
         >
-          <TabsList className="mb-4">
+          <TabsList className="mb-6 w-full justify-start gap-2">
             {categories.map((category) => (
-              <TabsTrigger key={category} value={category}>
+              <TabsTrigger
+                key={category}
+                value={category}
+                className="px-4 py-2"
+              >
                 {category.charAt(0).toUpperCase() +
                   category.slice(1).replace("_", " ")}
               </TabsTrigger>
@@ -228,11 +253,11 @@ const IntegrationSelector: React.FC<IntegrationSelectorProps> = ({
                 {filteredIntegrations.map((integration) => (
                   <div
                     key={integration.id}
-                    className={`border rounded-lg p-4 cursor-pointer transition-colors ${selectedIntegration === integration.id ? "border-primary bg-primary/5" : "hover:border-primary/50"}`}
+                    className={`border rounded-lg p-4 cursor-pointer transition-all hover:shadow-md ${selectedIntegration === integration.id ? "border-primary bg-primary/5 ring-1 ring-primary/30" : "hover:border-primary/50"}`}
                     onClick={() => handleIntegrationSelect(integration.id)}
                   >
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-10 h-10 rounded-full overflow-hidden bg-muted flex items-center justify-center">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 rounded-full overflow-hidden bg-muted flex items-center justify-center border shadow-sm">
                         <img
                           src={integration.logoUrl}
                           alt={integration.name}
@@ -240,9 +265,11 @@ const IntegrationSelector: React.FC<IntegrationSelectorProps> = ({
                         />
                       </div>
                       <div>
-                        <h4 className="font-medium">{integration.name}</h4>
-                        <p className="text-xs text-muted-foreground">
-                          {integration.category}
+                        <h4 className="font-medium text-primary">
+                          {integration.name}
+                        </h4>
+                        <p className="text-xs text-muted-foreground capitalize">
+                          {integration.category.replace("_", " ")}
                         </p>
                       </div>
                     </div>
@@ -257,15 +284,30 @@ const IntegrationSelector: React.FC<IntegrationSelectorProps> = ({
         </Tabs>
 
         {selectedIntegrationData && (
-          <div className="border rounded-lg p-4 mt-4">
-            <h4 className="font-medium mb-4">
+          <div className="border rounded-lg p-6 mt-6 bg-muted/30 shadow-sm">
+            <h4 className="font-medium mb-5 flex items-center gap-2 text-primary">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-settings"
+              >
+                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
               Configure {selectedIntegrationData.name}
             </h4>
 
-            <div className="space-y-4">
+            <div className="space-y-5 bg-background p-4 rounded-md border">
               {selectedIntegrationData.requiredCredentials.map((cred) => (
                 <div key={cred} className="space-y-2">
-                  <Label htmlFor={cred}>
+                  <Label htmlFor={cred} className="text-sm font-medium">
                     {cred
                       .split(/(?=[A-Z])/)
                       .join(" ")
@@ -294,18 +336,54 @@ const IntegrationSelector: React.FC<IntegrationSelectorProps> = ({
                       .split("_")
                       .join(" ")
                       .toLowerCase()}`}
+                    className="h-10"
                   />
+                  <p className="text-xs text-muted-foreground">
+                    {cred.toLowerCase().includes("key") ||
+                    cred.toLowerCase().includes("secret") ||
+                    cred.toLowerCase().includes("password")
+                      ? "This credential will be securely stored"
+                      : `Required for ${selectedIntegrationData.name} integration`}
+                  </p>
                 </div>
               ))}
 
               <Button
                 onClick={handleActivate}
                 disabled={activatingIntegration}
-                className="mt-2"
+                className="mt-4 w-full gap-2"
+                variant="default"
               >
-                {activatingIntegration
-                  ? "Connecting..."
-                  : "Connect Integration"}
+                {activatingIntegration ? (
+                  <>
+                    <svg
+                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Connecting...
+                  </>
+                ) : (
+                  <>
+                    Connect {selectedIntegrationData.name}
+                    <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
               </Button>
             </div>
           </div>

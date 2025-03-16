@@ -1,11 +1,19 @@
 import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import ModelSelector from "@/components/model-selector/ModelSelector";
 import IntegrationSelector from "@/components/integration-selector/IntegrationSelector";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Puzzle, Zap } from "lucide-react";
+import { Bot, Puzzle, Zap, Save, ChevronRight } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { motion } from "framer-motion";
 
 interface AgentModelConfigProps {
   onSave?: (config: {
@@ -70,69 +78,97 @@ const AgentModelConfig: React.FC<AgentModelConfigProps> = ({
   };
 
   return (
-    <Card className="w-full h-full flex flex-col bg-background border rounded-md shadow-sm overflow-hidden">
-      <CardHeader className="pb-2">
+    <Card className="w-full h-full flex flex-col bg-background border rounded-lg shadow-md overflow-hidden">
+      <CardHeader className="pb-2 border-b">
         <CardTitle className="flex items-center gap-2">
-          <Bot className="h-5 w-5" />
+          <Bot className="h-5 w-5 text-primary" />
           Agent Configuration
         </CardTitle>
+        <CardDescription>
+          Configure your agent's language model and integrations
+        </CardDescription>
       </CardHeader>
 
-      <CardContent className="flex-1 overflow-auto">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="mb-4">
-            <TabsTrigger value="model" className="flex items-center gap-1">
+      <CardContent className="flex-1 overflow-auto p-5">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="mb-6 w-full justify-start gap-2">
+            <TabsTrigger
+              value="model"
+              className="flex items-center gap-2 px-4 py-2"
+            >
               <Zap className="h-4 w-4" />
               Model
             </TabsTrigger>
             <TabsTrigger
               value="integrations"
-              className="flex items-center gap-1"
+              className="flex items-center gap-2 px-4 py-2"
             >
               <Puzzle className="h-4 w-4" />
               Integrations
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="model" className="mt-0">
-            <ModelSelector
-              onModelSelect={handleModelSelect}
-              defaultProvider={selectedModel.provider}
-              defaultModelName={selectedModel.modelName}
-            />
+          <TabsContent value="model" className="mt-0 space-y-4">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ModelSelector
+                onModelSelect={handleModelSelect}
+                defaultProvider={selectedModel.provider}
+                defaultModelName={selectedModel.modelName}
+              />
+            </motion.div>
           </TabsContent>
 
-          <TabsContent value="integrations" className="mt-0">
-            <IntegrationSelector
-              onIntegrationSelect={handleIntegrationSelect}
-            />
+          <TabsContent value="integrations" className="mt-0 space-y-4">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <IntegrationSelector
+                onIntegrationSelect={handleIntegrationSelect}
+              />
+            </motion.div>
           </TabsContent>
         </Tabs>
 
-        <div className="mt-6 border-t pt-4">
-          <h4 className="font-medium mb-3">Configuration Summary</h4>
+        <Separator className="my-6" />
 
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm font-medium mb-2">Selected Model:</p>
-              <Badge variant="outline" className="text-xs">
+        <div className="bg-muted/30 rounded-lg p-5 border">
+          <h4 className="font-medium mb-4 flex items-center gap-2 text-primary">
+            <Save className="h-4 w-4" />
+            Configuration Summary
+          </h4>
+
+          <div className="space-y-5">
+            <div className="bg-background p-3 rounded-md border">
+              <p className="text-sm font-medium mb-2 text-muted-foreground">
+                Selected Model:
+              </p>
+              <Badge
+                variant="outline"
+                className="text-xs font-medium py-1 px-2"
+              >
                 {selectedModel.provider.charAt(0).toUpperCase() +
                   selectedModel.provider.slice(1)}{" "}
                 / {selectedModel.modelName}
               </Badge>
             </div>
 
-            {selectedIntegrations.length > 0 && (
-              <div>
-                <p className="text-sm font-medium mb-2">
-                  Connected Integrations:
-                </p>
+            <div className="bg-background p-3 rounded-md border">
+              <p className="text-sm font-medium mb-2 text-muted-foreground">
+                Connected Integrations:
+              </p>
+              {selectedIntegrations.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {selectedIntegrations.map((integration) => (
                     <Badge
                       key={integration.id}
                       variant="secondary"
-                      className="flex items-center gap-1 cursor-pointer"
+                      className="flex items-center gap-1 cursor-pointer hover:bg-secondary/80 transition-colors"
                       onClick={() => handleRemoveIntegration(integration.id)}
                     >
                       {integration.name}
@@ -140,12 +176,20 @@ const AgentModelConfig: React.FC<AgentModelConfigProps> = ({
                     </Badge>
                   ))}
                 </div>
-              </div>
-            )}
+              ) : (
+                <p className="text-sm text-muted-foreground italic">
+                  No integrations connected
+                </p>
+              )}
+            </div>
           </div>
 
-          <Button onClick={handleSaveConfig} className="mt-6">
+          <Button
+            onClick={handleSaveConfig}
+            className="mt-6 w-full gap-2 group"
+          >
             Save Configuration
+            <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>
       </CardContent>

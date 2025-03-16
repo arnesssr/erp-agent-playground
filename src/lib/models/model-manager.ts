@@ -1,5 +1,5 @@
-import { BaseLLM } from "langchain/llms/base";
 import { OpenAI } from "@langchain/openai";
+import { BaseLLM } from "langchain/llms/base";
 import { PromptTemplate } from "langchain/prompts";
 
 export type ModelConfig = {
