@@ -62,8 +62,10 @@
     "recharts": "^2.15.1",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
+    "uuid": "^11.1.0",
     "vaul": "^0.9.1",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zustand": "5.0.3"
   },
   "devDependencies": {
     "@swc/core": "1.3.96",
