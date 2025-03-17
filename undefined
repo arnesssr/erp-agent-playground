@@ -1,0 +1,13 @@
+import React from "react";
+import AgentMarketplace from "@/components/features/AgentMarketplace";
+
+export default function AgentMarketplaceView() {
+  return (
+    <div className="p-4 bg-background w-full h-full">
+      <AgentMarketplace 
+        onImport={(agentId) => console.log("Import agent:", agentId)}
+        onViewDetails={(agentId) => console.log("View agent details:", agentId)}
+      />
+    </div>
+  );
+}
